@@ -36,10 +36,6 @@ export const useCatalogueStore = defineStore('catalogue', () => {
     selectedComponents.value[category] = component
   }
 
-  function isCategorySelected(category: keyof SelectionMap) {
-    return !!selectedComponents.value[category]
-  }
-
   const isComponentCompatible = computed(() => (currentId: string, currentCategory: string) => {
     const selection = selectedComponents.value
     const constraintsMap = constraints.value
@@ -140,7 +136,6 @@ export const useCatalogueStore = defineStore('catalogue', () => {
     fetchCatalogue,
     fetchConstraints,
     setSelectedComponent,
-    isCategorySelected,
     fetchPricingRules,
   }
 })
