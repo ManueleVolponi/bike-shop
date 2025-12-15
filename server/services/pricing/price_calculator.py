@@ -4,9 +4,12 @@ from .price_strategy import PricingStrategy
 from server.components.abc_components import BikeComponent
 
 class PriceCalculator:
-    def __init__(self, bike_instance: Bike, strategy: PricingStrategy):
-        self.bike = bike_instance
+    def __init__(self, strategy: PricingStrategy):
+        self.bike = None
         self.strategy = strategy
+        
+    def set_bike_instance(self, bike_instance: Bike):
+        self.bike = bike_instance
 
     def get_selected_components(self) -> List[BikeComponent]:
         components = []

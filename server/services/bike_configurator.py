@@ -1,16 +1,16 @@
 from typing import Dict, List
 from .catalogue_gateway import CatalogueGateway
 from .pricing.price_calculator import PriceCalculator
-from .pricing.price_strategy import PricingStrategy
 from server.bike.models import Bike
 from server.components.abc_components import BikeComponent
 from .pricing.pricing_rule_applicator import PricingRuleApplicator
 
 class BikeConfiguratorService:
     
-    def __init__(self, catalogue_gateway: CatalogueGateway, pricing_strategy: PricingStrategy):
+    def __init__(self, catalogue_gateway: CatalogueGateway, price_calculator: PriceCalculator, pricing_rules_app: PricingRuleApplicator):
         self.catalogue = catalogue_gateway 
-        self.pricing_strategy = pricing_strategy
+        self.price_calculator = price_calculator
+        self.rule_applicator = pricing_rules_app
 
     async def create_bike_from_selection(self, selection_ids: Dict[str, str]) -> Bike:
         frame_type = await self.catalogue.get_component_by_id(selection_ids.get('frame_type'))
@@ -40,12 +40,8 @@ class BikeConfiguratorService:
             assembled_bike.price = 0.0 
             return assembled_bike
 
-        calculator = PriceCalculator(bike_instance=assembled_bike, strategy=self.pricing_strategy)
-        base_price = calculator.process_calculation()
+        self.price_calculator.set_bike_instance(bike_instance=assembled_bike)
 
-        pricing_rules = await self.catalogue.get_pricing_rules()
-
-        rule_applicator = PricingRuleApplicator(pricing_rules=pricing_rules)
-        assembled_bike.price = rule_applicator.apply_rules(calculator.get_selected_components(), base_price)
+        assembled_bike.price = self.rule_applicator.apply_rules(self.price_calculator.get_selected_components())
         
         return assembled_bike

@@ -2,6 +2,8 @@ import unittest
 from server.services.bike_configurator import BikeConfiguratorService
 from server.services.catalogue_gateway import CatalogueGateway
 from server.services.pricing.price_strategy import StandardPricingStrategy
+from server.services.pricing.price_calculator import PriceCalculator
+from server.services.pricing.pricing_rule_applicator import PricingRuleApplicator
 
 T_DIA = "T-DIAMOND"
 T_FS = "T-FS"
@@ -23,13 +25,17 @@ CH_8S = "CH-8S"
 
 class TestBikeConfigurationIntegration(unittest.IsolatedAsyncioTestCase): 
 
-    def setUp(self):
+    async def asyncSetUp(self):
         self.catalogue_gateway = CatalogueGateway()
         self.standard_strategy = StandardPricingStrategy()
+        pricing_rules = await self.catalogue_gateway.get_pricing_rules()
+        self.price_calculator = PriceCalculator(strategy=self.standard_strategy)
+        self.pricing_rules_applicator = PricingRuleApplicator(pricing_rules=pricing_rules)
         
         self.config_service = BikeConfiguratorService(
             catalogue_gateway=self.catalogue_gateway,
-            pricing_strategy=self.standard_strategy
+            price_calculator=self.price_calculator,
+            pricing_rules_app=self.pricing_rules_applicator
         )
 
         self.selection_ok = {
@@ -112,10 +118,12 @@ class TestBikeConfigurationIntegration(unittest.IsolatedAsyncioTestCase):
         with self.assertRaises(ValueError):
             await self.config_service.create_bike_from_selection(selection_incomplete)
             
-    def tearDown(self):
+    async def asyncTearDown(self):
         self.catalogue_gateway = None
         self.standard_strategy = None
-        self.config_service = {}
+        self.price_calculator = None
+        self.pricing_rules_applicator = None
+        self.config_service = None
         
         self.selection_ok = {}
         self.selection_ok_1 = {}

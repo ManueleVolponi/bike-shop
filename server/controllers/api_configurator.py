@@ -3,6 +3,8 @@ from typing import Dict, Union, Annotated, List
 from collections import defaultdict
 from server.services.catalogue_gateway import CatalogueGateway
 from server.services.pricing.price_strategy import StandardPricingStrategy
+from server.services.pricing.price_calculator import PriceCalculator
+from server.services.pricing.pricing_rule_applicator import PricingRuleApplicator
 from server.services.bike_configurator import BikeConfiguratorService
 
 router = APIRouter()
@@ -12,12 +14,24 @@ router = APIRouter()
 def get_catalogue_gateway() -> CatalogueGateway:
   return CatalogueGateway()
 
+def get_standard_price_strategy() -> StandardPricingStrategy:
+  return StandardPricingStrategy()
+
+def get_price_calculator() -> PriceCalculator:
+  return PriceCalculator(strategy=get_standard_price_strategy())
+
+async def get_pricing_rules_applicator(gateway: CatalogueGateway = Depends(get_catalogue_gateway)) -> PricingRuleApplicator:
+  return PricingRuleApplicator(pricing_rules=await gateway.get_pricing_rules())
+
 def get_bike_configurator_service(
-  gateway: CatalogueGateway = Depends(get_catalogue_gateway)
+  gateway: CatalogueGateway = Depends(get_catalogue_gateway),
+  pc: PriceCalculator = Depends(get_price_calculator),
+  pra: PricingRuleApplicator = Depends(get_pricing_rules_applicator)
 ) -> BikeConfiguratorService:
   return BikeConfiguratorService(
     catalogue_gateway=gateway,
-    pricing_strategy=StandardPricingStrategy()
+    price_calculator= pc,
+    pricing_rules_app= pra
   )
 
 ConfigService = Annotated[BikeConfiguratorService, Depends(get_bike_configurator_service)]

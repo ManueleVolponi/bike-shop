@@ -5,7 +5,7 @@ class PricingRuleApplicator:
     def __init__(self, pricing_rules: List[Dict]):
         self.rules = pricing_rules
 
-    def apply_rules(self, components: List[BikeComponent], current_price: float) -> float:
+    def apply_rules(self, components: List[BikeComponent]) -> float:
         final_prices = {c.category: c.price for c in components}
         components_by_category = {c.category: c for c in components}
 
