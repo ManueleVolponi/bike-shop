@@ -1,0 +1,19 @@
+[
+  {"id": "T-FS", "category": "frame_type", "name": "Full-suspension Frame", "price": 130.00},
+  {"id": "T-DIAMOND", "category": "frame_type", "name": "Diamond Frame", "price": 100.00},
+  {"id": "T-STEP", "category": "frame_type", "name": "Step-through Frame", "price": 110.00},
+
+  {"id": "F-MATTE", "category": "frame_finish", "name": "Matte", "price": 30.00},
+  {"id": "F-SHINY", "category": "frame_finish", "name": "Shiny", "price": 30.00},
+  
+  {"id": "W-ROAD", "category": "wheels", "name": "Road Wheels", "price": 80.00},
+  {"id": "W-MTN", "category": "wheels", "name": "Mountain Wheels", "price": 90.00},
+  {"id": "W-FAT", "category": "wheels", "name": "Fat Bike Wheels", "price": 95.00},
+  
+  {"id": "C-RED", "category": "rim_color", "name": "Red", "price": 20.00},
+  {"id": "C-BLACK", "category": "rim_color", "name": "Black", "price": 25.00},
+  {"id": "C-BLUE", "category": "rim_color", "name": "Blue", "price": 20.00},
+
+  {"id": "CH-SS", "category": "chain", "name": "Single-speed Chain", "price": 43.00},
+  {"id": "CH-8S", "category": "chain", "name": "8-speed Chain", "price": 67.00}
+]

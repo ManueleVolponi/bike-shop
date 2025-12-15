@@ -1,0 +1,14 @@
+[
+  {
+    "rule_id": "P001",
+    "selectors": [
+      { "category": "frame_type", "id": "T-FS" }
+    ],
+    "effect": {
+      "target_category": "frame_finish",
+      "target_id": "F-MATTE",
+      "type": "FIXED_PRICE", 
+      "value": 50.00
+    }
+  }
+]

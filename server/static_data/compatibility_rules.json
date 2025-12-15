@@ -1,0 +1,22 @@
+[
+  {
+    "rule_id": "R001",
+    "affects_category": "frame_type",
+    "conditions": [
+      {
+        "selector": {"category": "wheels", "id": "W-MTN"},
+        "result_set": {"frame_type": {"include": ["T-FS"]}}
+      }
+    ]
+  },
+  {
+    "rule_id": "R002",
+    "affects_category": "rim_color",
+    "conditions": [
+      {
+        "selector": {"category": "wheels", "id": "W-FAT"},
+        "result_set": {"rim_color": {"exclude": ["C-RED"]}}
+      }
+    ]
+  }
+]
